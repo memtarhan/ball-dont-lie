@@ -7,36 +7,58 @@
 
 import SwiftUI
 
+struct StandingRow: View {
+    var standing: StandingModel
+    var width: CGFloat
+
+    var body: some View {
+        ScrollView(.horizontal) {
+            HStack(alignment: .center) {
+                HStack(alignment: .center, spacing: 8) {
+                    Text(standing.seat)
+                        .font(.footnote)
+                        .padding(8)
+                        .background(Color.green.opacity(0.2))
+                        .clipShape(Circle())
+                    Text(standing.name)
+                        .font(.body.bold())
+                        .frame(width: width)
+                    Spacer()
+                }
+                Spacer()
+
+                HStack(alignment: .center) {
+                    ForEach(standing.stats) { stat in
+                        VStack {
+                            Text(stat.description)
+                                .font(.caption)
+                                .foregroundStyle(stat.color)
+                            Text(stat.value)
+                                .font(.subheadline)
+                        }
+                        .padding(6)
+                        .border(Color.green.opacity(0.2), width: 0.5)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                }
+            }
+        }
+    }
+}
+
 struct ContentView: View {
     @StateObject private var model = StandingsModel()
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(model.standings) { standing in
-                    HStack {
-                        Text(standing.name)
-                        Spacer()
-                        ScrollView {
-                            HStack {
-                                ForEach(standing.stats) { stat in
-                                    VStack {
-                                        Text(stat.description)
-                                            .font(.caption)
-                                            .foregroundStyle(stat.color)
-                                        Text(stat.value)
-                                            .font(.headline)
-                                    }
-                                    .padding(6)
-                                    .border(Color.green.opacity(0.2), width: 0.5)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                                }
-                            }
-                        }
+            GeometryReader { geometry in
+                List {
+                    ForEach(model.standings) { standing in
+                        StandingRow(standing: standing, width: geometry.size.width / 2.5)
                     }
                 }
+                .navigationTitle("Standings")
             }
-            .navigationTitle("Standings")
         }
         .task {
             await model.handleStandings()
