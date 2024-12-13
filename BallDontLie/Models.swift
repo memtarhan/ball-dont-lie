@@ -21,7 +21,7 @@ struct StandingsResponse: APIResponse {
 
 // MARK: - Standing
 
-struct Standing: Codable {
+struct Standing: APIResponse {
     let teamName: String
     let stats: [Stat]
 
@@ -33,16 +33,34 @@ struct Standing: Codable {
 
 // MARK: - Stat
 
-struct Stat: Codable {
-    let winsRegularSeason, lossesRegularSeason: Int?
-    let winLossPctRegularSeason, gbRegularSeason, ptsPerGRegularSeason, oppPtsPerGRegularSeason: Double?
+// MARK: - Stat
+struct Stat: APIResponse {
+    let name: String
+    let value: String
+    let shortName: String
+    let color: String
 
     enum CodingKeys: String, CodingKey {
-        case winsRegularSeason = "wins|regular-season"
-        case lossesRegularSeason = "losses|regular-season"
-        case winLossPctRegularSeason = "win_loss_pct|regular-season"
-        case gbRegularSeason = "gb|regular-season"
-        case ptsPerGRegularSeason = "pts_per_g|regular-season"
-        case oppPtsPerGRegularSeason = "opp_pts_per_g|regular-season"
+        case name, value
+        case shortName = "short_name"
+        case color
+    }
+}
+
+// MARK: - ScoresResponse
+
+struct ScoresResponse: APIResponse {
+    let title: String
+    let scores: [[Score]]
+}
+
+// MARK: - Score
+
+struct Score: APIResponse {
+    let teamName, score: String
+
+    enum CodingKeys: String, CodingKey {
+        case teamName = "team_name"
+        case score
     }
 }
