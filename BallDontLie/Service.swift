@@ -36,16 +36,33 @@ private extension APIService {
 }
 
 struct Endpoints {
+    struct NBAStandings {
+        static func get() -> URL? {
+            URL(string: "https://parser-app-6e0f7eb625f7.herokuapp.com/nba/standings")
+        }
+    }
+
     struct Standings {
         static func get() -> URL? {
             URL(string: "https://parser-app-6e0f7eb625f7.herokuapp.com/euroleague/standings")
         }
     }
-    
+
     struct Scores {
         static func get() -> URL? {
             URL(string: "https://parser-app-6e0f7eb625f7.herokuapp.com/euroleague/scores")
         }
+    }
+}
+
+class NBAStandingsService: APIService {
+    func get() async throws -> NBAStandingsResponse {
+        guard let endpoint = Endpoints.NBAStandings.get() else {
+            throw APIError.badURL
+        }
+
+        let response: NBAStandingsResponse = try await handleDataTask(from: endpoint)
+        return response
     }
 }
 

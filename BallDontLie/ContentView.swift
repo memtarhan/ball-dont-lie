@@ -10,6 +10,11 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
+            NBAStandingsView()
+                .tabItem {
+                    Label("NBA", systemImage: "basketball.fill")
+                }
+                .tag(0)
             StandingsView()
                 .tabItem {
                     Label("Standings", systemImage: "list.bullet.circle.fill")
