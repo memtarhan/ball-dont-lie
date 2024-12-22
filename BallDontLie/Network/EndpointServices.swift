@@ -22,6 +22,12 @@ struct Endpoints {
             URL(string: "\(baseURL)/nba/standings")
         }
     }
+    
+    struct NBAScores {
+        static func get(month: Int, day: Int, year: Int) -> URL? {
+            URL(string: "\(baseURL)/nba/scores?month=\(month)&day=\(day)&year=\(year)")
+        }
+    }
 
     struct Standings {
         static func get() -> URL? {

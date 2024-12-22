@@ -20,7 +20,7 @@ struct ContentView: View {
                     Label("Standings", systemImage: "list.bullet.circle.fill")
                 }
                 .tag(1)
-            ScoresView()
+            NBAScoresView()
                 .tabItem {
                     Label("Scores", systemImage: "basketball.circle.fill")
                 }
