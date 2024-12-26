@@ -7,8 +7,8 @@
 
 import Foundation
 
- private let baseURL = "https://parser-app-6e0f7eb625f7.herokuapp.com"
-//private let baseURL = "http://127.0.0.1:8000"
+// private let baseURL = "https://parser-app-6e0f7eb625f7.herokuapp.com"
+private let baseURL = "http://127.0.0.1:8000"
 
 struct Endpoints {
     struct Leagues {
@@ -22,10 +22,13 @@ struct Endpoints {
             URL(string: "\(baseURL)/nba/standings")
         }
     }
-    
+
     struct NBAScores {
-        static func get(month: Int, day: Int, year: Int) -> URL? {
-            URL(string: "\(baseURL)/nba/scores?month=\(month)&day=\(day)&year=\(year)")
+        static func get(month: Int? = nil, day: Int? = nil, year: Int? = nil) -> URL? {
+            guard let month,
+                  let day,
+                  let year else { return URL(string: "\(baseURL)/nba/scores") }
+            return URL(string: "\(baseURL)/nba/scores?month=\(month)&day=\(day)&year=\(year)")
         }
     }
 

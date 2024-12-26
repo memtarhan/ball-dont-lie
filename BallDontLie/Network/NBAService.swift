@@ -8,8 +8,9 @@
 import Foundation
 
 class NBAService: APIService {
-    func getScores() async throws -> ScoresResponseX {
-        guard let endpoint = Endpoints.NBAScores.get(month: 12, day: 21, year: 2024) else {
+    func getScores(date: Date? = nil) async throws -> ScoresResponseX {
+        // TODO: Implement dates
+        guard let endpoint = Endpoints.NBAScores.get() else {
             throw APIError.badURL
         }
 

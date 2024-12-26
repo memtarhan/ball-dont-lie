@@ -15,14 +15,16 @@ struct ContentView: View {
                     Label("NBA", systemImage: "basketball.fill")
                 }
                 .tag(0)
-            LeaguesView()
-                .tabItem {
-                    Label("Standings", systemImage: "list.bullet.circle.fill")
-                }
-                .tag(1)
+
             NBAScoresView()
                 .tabItem {
                     Label("Scores", systemImage: "basketball.circle.fill")
+                }
+                .tag(1)
+
+            LeaguesView()
+                .tabItem {
+                    Label("Standings", systemImage: "list.bullet.circle.fill")
                 }
                 .tag(2)
         }

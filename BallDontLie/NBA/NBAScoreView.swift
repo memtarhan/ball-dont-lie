@@ -60,6 +60,7 @@ struct NBAScoreView: View {
             scoresSection
         }
         .padding()
+//        .border(Color(hex: data.color), width: 1)
         .background(Color(hex: data.color))
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
