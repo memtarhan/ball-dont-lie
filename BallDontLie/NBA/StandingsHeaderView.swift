@@ -123,7 +123,7 @@ struct StatsRowView: View {
                 Text(item)
                     .font(.subheadline.weight(.medium))
                     .multilineTextAlignment(.center)
-                    .foregroundColor(Color.black.opacity(0.8))
+                    .foregroundColor(.primary)
                     .padding(.vertical, 12)
                     .frame(minWidth: itemWidth)
             }
@@ -144,12 +144,8 @@ struct StandingsHeaderView: View {
                         .frame(height: 45)
 
                     ForEach(standings) { teamStanding in
-                        NavigationLink {
-                            NBATeamDetails(shortName: teamStanding.shortName, name: teamStanding.name, logo: teamStanding.logo)
-                        } label: {
-                            StatsHeaderView(title: teamStanding.shortName, seat: teamStanding.seat, logo: teamStanding.logo)
-                                .frame(height: 45)
-                        }
+                        StatsHeaderView(title: teamStanding.shortName, seat: teamStanding.seat, logo: teamStanding.logo)
+                            .frame(height: 45)
                     }
                 }
 

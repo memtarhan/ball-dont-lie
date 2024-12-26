@@ -7,8 +7,8 @@
 
 import Foundation
 
-// private let baseURL = "https://parser-app-6e0f7eb625f7.herokuapp.com"
-private let baseURL = "http://127.0.0.1:8000"
+ private let baseURL = "https://parser-app-6e0f7eb625f7.herokuapp.com"
+//private let baseURL = "http://127.0.0.1:8000"
 
 struct Endpoints {
     struct Leagues {
