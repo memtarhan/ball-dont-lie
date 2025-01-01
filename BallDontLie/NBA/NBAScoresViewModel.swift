@@ -10,12 +10,62 @@ import Foundation
 @MainActor
 class NBAScoresViewModel: ObservableObject {
     @Published var data: [NBAScoreDisplayModel] = []
+    @Published var title: String = "..."
+    @Published var description: String? = nil
+
+    private var currentDisplayedDate: Date?
 
     private let service = NBAService()
 
-    func fetchScores() async {
-        let response = try! await service.getScores()
+    func updateWithPreviousDate() {
+        if let currentDisplayedDate {
+            self.currentDisplayedDate = currentDisplayedDate.addingTimeInterval(-1 * 60 * 60 * 24)
 
+        } else {
+            currentDisplayedDate = Date()
+        }
+
+        refresh()
+    }
+
+    
+    func updateWithNextDate() {
+        if let currentDisplayedDate {
+            self.currentDisplayedDate = currentDisplayedDate.addingTimeInterval(1 * 60 * 60 * 24)
+
+        } else {
+            currentDisplayedDate = Date()
+        }
+
+        refresh()
+    }
+    
+    private func refresh() {
+        data.removeAll()
+        title = "..."
+
+        Task {
+            await fetchScores()
+        }
+    }
+    
+    func refreshToDate() {
+        data.removeAll()
+        title = "..."
+        currentDisplayedDate = nil
+
+        Task {
+            await fetchScores()
+        }
+    }
+
+    func fetchScores() async {
+        let response = try! await service.getScores(date: currentDisplayedDate)
+        let date = response.date
+        currentDisplayedDate = date 
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, yyyy"
+        title = formatter.string(from: date)
         data = response.scores
             .map { score in
                 NBAScoreDisplayModel(
@@ -34,6 +84,13 @@ class NBAScoresViewModel: ObservableObject {
                     color: score.color
                 )
             }
+        
+        if data.isEmpty {
+            description = "No games played on this date.\nPull to get the latest scores"
+            
+        } else {
+            description = nil 
+        }
     }
 
     func getPeriodName(forPeriodIndex index: Int) -> String {

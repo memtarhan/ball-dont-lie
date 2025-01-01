@@ -9,6 +9,7 @@ import Foundation
 
 // MARK: - ScoresResponse
 struct ScoresResponseX: APIResponse {
+    let date: Date
     let scores: [ScoreResponse]
 }
 

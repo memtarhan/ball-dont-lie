@@ -26,7 +26,12 @@ extension APIService {
 
 private extension APIService {
     var decoder: JSONDecoder {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM d, yyyy"
         let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+//        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
         return decoder
     }
 

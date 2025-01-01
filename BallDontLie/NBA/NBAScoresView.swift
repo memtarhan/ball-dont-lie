@@ -12,21 +12,47 @@ struct NBAScoresView: View {
 
     var body: some View {
         NavigationStack {
-//            datesView
-//                .frame(height: 64)
-//                .padding(.horizontal, 12)
-
             List {
                 ForEach(viewModel.data) { score in
                     NBAScoreView(data: score)
                         .listRowSeparator(.hidden)
                 }
+                
+                if let description = viewModel.description {
+                    VStack {
+                        Text(description)
+                            .font(.title2.weight(.light))
+                            .padding()
+                        Spacer()
+                    }
+
+                }
             }
-            .navigationTitle("Today's Scores")
             .listStyle(.plain)
             .listRowSpacing(0)
-        }
 
+            .navigationTitle(viewModel.title)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        viewModel.updateWithNextDate()
+                    } label: {
+                        Image(systemName: "forward.frame.fill")
+                    }
+                }
+
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        viewModel.updateWithPreviousDate()
+                    } label: {
+                        Image(systemName: "backward.frame.fill")
+                    }
+                }
+            }
+        }
+        .refreshable {
+            viewModel.refreshToDate()
+        }
         .task {
             await viewModel.fetchScores()
         }
