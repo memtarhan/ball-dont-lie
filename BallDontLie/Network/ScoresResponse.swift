@@ -8,12 +8,14 @@
 import Foundation
 
 // MARK: - ScoresResponse
+
 struct ScoresResponseX: APIResponse {
     let date: Date
     let scores: [ScoreResponse]
 }
 
 // MARK: - Score
+
 struct ScoreResponse: APIResponse {
     let teams: [TeamResponse]
     let scores: [[Int]]
@@ -22,6 +24,7 @@ struct ScoreResponse: APIResponse {
 }
 
 // MARK: - Team
+
 struct TeamResponse: APIResponse {
     let teamName: String
     let teamScore: Int
@@ -35,6 +38,62 @@ struct TeamResponse: APIResponse {
 }
 
 enum TeamStatus: String, Codable {
-    case loser = "loser"
-    case winner = "winner"
+    case loser
+    case winner
+}
+
+// MARK: - LatestScoresResponse
+
+struct LatestScoresResponse: APIResponse {
+    let latestScores: [[TeamResponse]]
+
+    enum CodingKeys: String, CodingKey {
+        case latestScores = "latest_scores"
+    }
+}
+
+// MARK: - TopPerformerResponse
+
+struct TopPerformerResponse: APIResponse {
+    let playerName: String
+    let points: Int
+    let rebounds: Int
+    let assists: Int
+
+    enum CodingKeys: String, CodingKey {
+        case playerName = "player_name"
+        case points = "pts"
+        case rebounds = "trb"
+        case assists = "ast"
+    }
+}
+
+// MARK: - TopPerformersResponse
+
+struct TopPerformersResponse: APIResponse {
+    let performers: [TopPerformerResponse]
+}
+
+// MARK: - StatLeaderResponse
+
+struct StatLeaderResponse: APIResponse {
+    let playerName: String
+    let statType: String
+    let statValue: Double
+
+    enum CodingKeys: String, CodingKey {
+        case playerName = "player_name"
+        case statType = "stat_type"
+        case statValue = "stat_value"
+    }
+}
+
+// MARK: - StatLeadersResponse
+
+struct StatLeadersResponse: APIResponse {
+    let statLeaders: [StatLeaderResponse]
+
+    enum CodingKeys: String, CodingKey {
+        case statLeaders = "stat_leaders"
+    }
 }

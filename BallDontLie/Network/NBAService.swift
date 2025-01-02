@@ -16,10 +16,10 @@ class NBAService: APIService {
             let day = calendar.component(.day, from: date)
             let year = calendar.component(.year, from: date)
 
-            url = Endpoints.NBAScores.get(month: month, day: day, year: year)
+            url = Endpoints.NBA.getScores(month: month, day: day, year: year)
 
         } else {
-            url = Endpoints.NBAScores.get()
+            url = Endpoints.NBA.getScores()
         }
 
         guard let endpoint = url else {

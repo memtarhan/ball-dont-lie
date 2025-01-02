@@ -42,7 +42,7 @@ private extension APIService {
 
 class NBAStandingsService: APIService {
     func get() async throws -> NBAStandingsResponse {
-        guard let endpoint = Endpoints.NBAStandings.get() else {
+        guard let endpoint = Endpoints.NBA.getStandings() else {
             throw APIError.badURL
         }
 

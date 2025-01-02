@@ -7,12 +7,35 @@
 
 import SwiftUI
 
-struct NBAScoreUpperHeader {
+struct NBAScoreUpperHeader: Identifiable {
     let awayTeamName: String
     let awayTeamScore: Int
     let homeTeamName: String
     let homeTeamScore: Int
     let isHomeTeamWinner: Bool
+
+    var id: String { awayTeamName + homeTeamName }
+
+    static let sample = [
+        NBAScoreUpperHeader(
+            awayTeamName: "Golden State Warriors",
+            awayTeamScore: 112,
+            homeTeamName: "Los Angeles Lakers",
+            homeTeamScore: 111,
+            isHomeTeamWinner: false),
+        NBAScoreUpperHeader(
+            awayTeamName: "Los Angeles Clippers",
+            awayTeamScore: 112,
+            homeTeamName: "Los Angeles Lakers",
+            homeTeamScore: 111,
+            isHomeTeamWinner: false),
+        NBAScoreUpperHeader(
+            awayTeamName: "Dallas Mavericks",
+            awayTeamScore: 102,
+            homeTeamName: "Los Angeles Lakers",
+            homeTeamScore: 111,
+            isHomeTeamWinner: true)
+    ]
 }
 
 struct NBAPeriodScore: Identifiable {
@@ -27,17 +50,11 @@ struct NBAScoreDisplayModel: Identifiable {
     let upperHeader: NBAScoreUpperHeader
     let periods: [NBAPeriodScore]
     let color: String
-    
+
     var id: String { color }
 
     static let sample = NBAScoreDisplayModel(
-        upperHeader: .init(
-            awayTeamName: "Golden State Warriors",
-            awayTeamScore: 112,
-            homeTeamName: "Los Angeles Lakers",
-            homeTeamScore: 111,
-            isHomeTeamWinner: false
-        ),
+        upperHeader: NBAScoreUpperHeader.sample[0],
         periods: [
             NBAPeriodScore(period: "1st", awayTeamScore: 20, homeTeamScore: 21),
             NBAPeriodScore(period: "2nd", awayTeamScore: 30, homeTeamScore: 32),

@@ -17,7 +17,7 @@ struct NBAScoresView: View {
                     NBAScoreView(data: score)
                         .listRowSeparator(.hidden)
                 }
-                
+
                 if let description = viewModel.description {
                     VStack {
                         Text(description)
@@ -25,7 +25,6 @@ struct NBAScoresView: View {
                             .padding()
                         Spacer()
                     }
-
                 }
             }
             .listStyle(.plain)
@@ -55,54 +54,6 @@ struct NBAScoresView: View {
         }
         .task {
             await viewModel.fetchScores()
-        }
-    }
-
-    private var datesView: some View {
-        HStack {
-            Button {
-            } label: {
-                HStack {
-                    Image(systemName: "arrow.backward.circle")
-                    Text("Dec 20 2024")
-                }
-                .font(.subheadline)
-                .minimumScaleFactor(0.5)
-                .foregroundStyle(Color.white)
-                .padding()
-                .background(Color.gray.opacity(0.7))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-            .frame(minWidth: 0, maxWidth: .infinity)
-
-            Button {
-            } label: {
-                HStack {
-                    Text("Dec 21\n2024")
-                }
-                .font(.subheadline)
-                .minimumScaleFactor(0.5)
-                .foregroundStyle(Color.white)
-                .padding()
-                .background(Color.gray.opacity(1.0))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-            .frame(minWidth: 0, maxWidth: .infinity)
-
-            Button {
-            } label: {
-                HStack {
-                    Text("Dec 22 2024")
-                    Image(systemName: "arrow.forward.circle")
-                }
-                .font(.subheadline)
-                .minimumScaleFactor(0.5)
-                .foregroundStyle(Color.white)
-                .padding()
-                .background(Color.gray.opacity(0.7))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-            .frame(minWidth: 0, maxWidth: .infinity)
         }
     }
 }
