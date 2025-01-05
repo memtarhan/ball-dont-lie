@@ -19,24 +19,24 @@ class EuroleagueViewModel: ObservableObject, EuroleagueScoresService, Euroleague
 
         let response = try! await [scores, standings]
 
-        handleScores(response: response[0] as! ScoresResponse)
+        handleScores(response: response[0] as! EuroleagueScoresResponse)
         handleStandings(response: response[1] as! StandingsResponse)
         
         loading = false
     }
 
-    private func handleScores(response: ScoresResponse) {
+    private func handleScores(response: EuroleagueScoresResponse) {
         let scoreModels = response.scores.map { scoreResponse in
             let firstTeam = TeamScoreModel(
                 teamName: scoreResponse[0].teamName,
-                score: scoreResponse[0].score,
-                isWinner: scoreResponse[0].score > scoreResponse[1].score
+                score: scoreResponse[0].teamScore,
+                isWinner: scoreResponse[0].teamStatus == .winner
             )
 
             let secondTeam = TeamScoreModel(
                 teamName: scoreResponse[1].teamName,
-                score: scoreResponse[1].score,
-                isWinner: scoreResponse[1].score > scoreResponse[0].score
+                score: scoreResponse[1].teamScore,
+                isWinner: scoreResponse[1].teamStatus == .winner
             )
 
             return ScoreModel(firstTeam: firstTeam, secondTeam: secondTeam)

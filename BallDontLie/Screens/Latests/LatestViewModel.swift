@@ -10,7 +10,7 @@ import Foundation
 @MainActor
 class LatestViewModel: ObservableObject, LatestService {
     @Published var loading: Bool = true
-    @Published var latestGames: [NBAScoreUpperHeader] = []
+    @Published var latestGames: [ScoreModel] = []
     @Published var topPerformers: [TopPerformerModel] = []
     @Published var statLeaders: [StatLeaderModel] = []
 
@@ -30,16 +30,23 @@ class LatestViewModel: ObservableObject, LatestService {
     }
 
     private func handleLatestGames(response: LatestScoresResponse) {
-        latestGames = response.latestScores
-            .map { latestScore in
-                NBAScoreUpperHeader(
-                    awayTeamName: latestScore[0].teamName,
-                    awayTeamScore: latestScore[0].teamScore,
-                    homeTeamName: latestScore[1].teamName,
-                    homeTeamScore: latestScore[1].teamScore,
-                    isHomeTeamWinner: latestScore[1].teamStatus == .winner
-                )
-            }
+        let scoreModels = response.latestScores.map { scoreResponse in
+            let firstTeam = TeamScoreModel(
+                teamName: scoreResponse[0].teamName,
+                score: scoreResponse[0].teamScore,
+                isWinner: scoreResponse[0].teamStatus == .winner
+            )
+
+            let secondTeam = TeamScoreModel(
+                teamName: scoreResponse[1].teamName,
+                score: scoreResponse[1].teamScore,
+                isWinner: scoreResponse[1].teamStatus == .winner
+            )
+
+            return ScoreModel(firstTeam: firstTeam, secondTeam: secondTeam)
+        }
+
+        latestGames = scoreModels
     }
 
     private func handleTopPerformers(response: TopPerformersResponse) {

@@ -7,9 +7,9 @@
 
 import Foundation
 
-class LeaguesService: APIService {
+class LeaguesService: APIService, LeaguesEndpointsService {
     func getStandings() async throws -> LeaguesResponse {
-        guard let endpoint = Endpoints.Leagues.getStandings() else {
+        guard let endpoint = getStandingsURL() else {
             throw APIError.badURL
         }
 

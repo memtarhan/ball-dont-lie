@@ -20,37 +20,6 @@ struct NBAScoreBottomFooter: Identifiable {
     ]
 }
 
-struct NBAScoreUpperHeader: Identifiable {
-    let awayTeamName: String
-    let awayTeamScore: Int
-    let homeTeamName: String
-    let homeTeamScore: Int
-    let isHomeTeamWinner: Bool
-
-    var id: String { awayTeamName + homeTeamName }
-
-    static let sample = [
-        NBAScoreUpperHeader(
-            awayTeamName: "Golden State Warriors",
-            awayTeamScore: 112,
-            homeTeamName: "Los Angeles Lakers",
-            homeTeamScore: 111,
-            isHomeTeamWinner: false),
-        NBAScoreUpperHeader(
-            awayTeamName: "Los Angeles Clippers",
-            awayTeamScore: 112,
-            homeTeamName: "Los Angeles Lakers",
-            homeTeamScore: 111,
-            isHomeTeamWinner: false),
-        NBAScoreUpperHeader(
-            awayTeamName: "Dallas Mavericks",
-            awayTeamScore: 102,
-            homeTeamName: "Los Angeles Lakers",
-            homeTeamScore: 111,
-            isHomeTeamWinner: true),
-    ]
-}
-
 struct NBAPeriodScore: Identifiable {
     let period: String
     let awayTeamScore: Int
@@ -60,7 +29,7 @@ struct NBAPeriodScore: Identifiable {
 }
 
 struct NBAScoreDisplayModel: Identifiable {
-    let upperHeader: NBAScoreUpperHeader
+    let upperHeader: ScoreModel
     let periods: [NBAPeriodScore]
     let color: String
     let bottomFooter: [NBAScoreBottomFooter]
@@ -68,7 +37,7 @@ struct NBAScoreDisplayModel: Identifiable {
     var id: String { color }
 
     static let sample = NBAScoreDisplayModel(
-        upperHeader: NBAScoreUpperHeader.sample[0],
+        upperHeader: ScoreModel.sample[0],
         periods: [
             NBAPeriodScore(period: "1st", awayTeamScore: 20, homeTeamScore: 21),
             NBAPeriodScore(period: "2nd", awayTeamScore: 30, homeTeamScore: 32),
@@ -102,22 +71,22 @@ struct NBAScoreView: View {
     var upperHeader: some View {
         VStack {
             HStack {
-                Text(data.upperHeader.awayTeamName)
+                Text(data.upperHeader.firstTeam.teamName)
                     .font(.headline)
                 Spacer()
-                Text(data.upperHeader.awayTeamScore, format: .number)
+                Text(data.upperHeader.firstTeam.score, format: .number)
                     .font(.title3.weight(.medium))
             }
-            .foregroundStyle(data.upperHeader.isHomeTeamWinner ? lighterColor : Color.white)
+            .foregroundStyle(data.upperHeader.firstTeam.isWinner ? lighterColor : Color.white)
 
             HStack {
-                Text(data.upperHeader.homeTeamName)
+                Text(data.upperHeader.secondTeam.teamName)
                     .font(.headline)
                 Spacer()
-                Text(data.upperHeader.homeTeamScore, format: .number)
+                Text(data.upperHeader.secondTeam.score, format: .number)
                     .font(.title3.weight(.medium))
             }
-            .foregroundStyle(data.upperHeader.isHomeTeamWinner ? Color.white : lighterColor)
+            .foregroundStyle(data.upperHeader.secondTeam.isWinner ? Color.white : lighterColor)
         }
     }
 
@@ -134,8 +103,8 @@ struct NBAScoreView: View {
             }
             HStack(alignment: .center) {
                 VStack(alignment: .leading) {
-                    Text(data.upperHeader.awayTeamName)
-                    Text(data.upperHeader.homeTeamName)
+                    Text(data.upperHeader.firstTeam.teamName)
+                    Text(data.upperHeader.secondTeam.teamName)
                 }
                 .font(.subheadline.italic())
                 .foregroundStyle(Color.white)

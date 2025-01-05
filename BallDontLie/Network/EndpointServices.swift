@@ -7,28 +7,8 @@
 
 import Foundation
 
- private let baseURL = "https://ball-dont-lie-c3286c3bbfc2.herokuapp.com"
-//private let baseURL = "http://127.0.0.1:8000"
-
-struct Endpoints {
-    struct Leagues {
-        static func getStandings() -> URL? {
-            URL(string: "\(baseURL)/leagues/standings")
-        }
-    }
-
-    struct Standings {
-        static func get() -> URL? {
-            URL(string: "\(baseURL)/euroleague/standings")
-        }
-    }
-
-    struct Scores {
-        static func get() -> URL? {
-            URL(string: "\(baseURL)/euroleague/scores")
-        }
-    }
-}
+//private let baseURL = "https://ball-dont-lie-c3286c3bbfc2.herokuapp.com"
+ private let baseURL = "http://127.0.0.1:8000"
 
 protocol EndpointsService { }
 
@@ -87,5 +67,15 @@ extension EuroleagueEndpointsService {
 
     func getStandingsURL() -> URL? {
         URL(string: "\(baseURL)/euroleague/standings")
+    }
+}
+
+protocol LeaguesEndpointsService: EndpointsService {
+    func getStandingsURL() -> URL?
+}
+
+extension LeaguesEndpointsService {
+    func getStandingsURL() -> URL? {
+        URL(string: "\(baseURL)/leagues/standings")
     }
 }

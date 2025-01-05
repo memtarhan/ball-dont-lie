@@ -9,7 +9,6 @@ import Foundation
 
 protocol APIResponse: Decodable { }
 
-
 // MARK: - LeaguesResponse
 
 struct LeaguesResponse: APIResponse {
@@ -23,7 +22,7 @@ struct LeagueResponse: APIResponse {
     let header: [String]
     let statsHeader: [[String]]
     let standings: [StandingsResponseX]
-    
+
     enum CodingKeys: String, CodingKey {
         case statsHeader = "stats_header"
         case title, header, standings
@@ -48,13 +47,12 @@ struct StatResponse: APIResponse {
     let name: String
     let value: String
     let shortName: String
-    
+
     enum CodingKeys: String, CodingKey {
         case shortName = "short_name"
         case name, value
     }
 }
-
 
 // MARK: - StandingsResponse
 
@@ -93,20 +91,9 @@ struct Stat: APIResponse {
 
 // MARK: - ScoresResponse
 
-struct ScoresResponse: APIResponse {
+struct EuroleagueScoresResponse: APIResponse {
     let title: String
-    let scores: [[Score]]
-}
-
-// MARK: - Score
-
-struct Score: APIResponse {
-    let teamName, score: String
-
-    enum CodingKeys: String, CodingKey {
-        case teamName = "team_name"
-        case score
-    }
+    let scores: [[ScoreResponse]]
 }
 
 // MARK: - Welcome
@@ -169,26 +156,25 @@ enum StatShortName: String, APIResponse {
     case wL = "W/L%"
 }
 
-
-// MARK: - ScoresResponse
+// MARK: - ScoresResponseX
 
 struct ScoresResponseX: APIResponse {
     let date: Date
-    let scores: [ScoreResponse]
+    let scores: [GameScoresResponse]
 }
 
-// MARK: - Score
+// MARK: - GameScoresResponse
 
-struct ScoreResponse: APIResponse {
-    let teams: [TeamResponse]
+struct GameScoresResponse: APIResponse {
+    let teams: [ScoreResponse]
     let scores: [[Int]]
     let stats: [[String]]
     let color: String
 }
 
-// MARK: - Team
+// MARK: - ScoreResponse
 
-struct TeamResponse: APIResponse {
+struct ScoreResponse: APIResponse {
     let teamName: String
     let teamScore: Int
     let teamStatus: TeamStatus
@@ -208,7 +194,7 @@ enum TeamStatus: String, Codable {
 // MARK: - LatestScoresResponse
 
 struct LatestScoresResponse: APIResponse {
-    let latestScores: [[TeamResponse]]
+    let latestScores: [[ScoreResponse]]
 
     enum CodingKeys: String, CodingKey {
         case latestScores = "latest_scores"

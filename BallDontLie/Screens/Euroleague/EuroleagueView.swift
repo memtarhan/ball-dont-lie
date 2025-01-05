@@ -31,9 +31,8 @@ struct EuroleagueView: View {
     }
     
     var contentView: some View {
-        VStack {
-            EuroleagueScoresView(data: viewModel.scores)
-                .padding(.horizontal, 20)
+        VStack(spacing: 8) {
+            LatestGamesView(data: viewModel.scores)
             EuroleagueStandingsView(data: viewModel.standings)
         }
     }

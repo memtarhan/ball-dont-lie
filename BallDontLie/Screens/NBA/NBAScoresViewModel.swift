@@ -65,18 +65,11 @@ class NBAScoresViewModel: ObservableObject, NBAScoresService {
         title = formatter.string(from: date)
         data = response.scores
             .map { score in
-                NBAScoreDisplayModel(
-                    upperHeader: NBAScoreUpperHeader(
-                        awayTeamName: score.teams[0].teamName,
-                        awayTeamScore: score
-                            .teams[0].teamScore,
-                        homeTeamName: score
-                            .teams[1].teamName,
-                        homeTeamScore: score
-                            .teams[1].teamScore,
-                        isHomeTeamWinner: score
-                            .teams[1].teamStatus == .winner
-                    ),
+                let firstTeam = TeamScoreModel(teamName: score.teams[0].teamName, score: score.teams[0].teamScore, isWinner: score.teams[0].teamStatus == .winner)
+                let secondTeam = TeamScoreModel(teamName: score.teams[1].teamName, score: score.teams[1].teamScore, isWinner: score.teams[1].teamStatus == .winner)
+
+                return NBAScoreDisplayModel(
+                    upperHeader: ScoreModel(firstTeam: firstTeam, secondTeam: secondTeam),
                     periods: self.getPeriodStatsData(score.scores),
                     color: score.color,
                     bottomFooter: score.stats.map { stat in

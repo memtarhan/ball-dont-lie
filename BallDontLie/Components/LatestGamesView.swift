@@ -8,25 +8,25 @@
 import SwiftUI
 
 struct LatestGameRow: View {
-    var data: NBAScoreUpperHeader
+    var data: ScoreModel
     var body: some View {
         VStack {
             HStack {
-                Text(data.awayTeamName)
-                    .font(.headline.weight(data.isHomeTeamWinner ? .light : .medium))
+                Text(data.firstTeam.teamName)
+                    .font(.headline.weight(data.firstTeam.isWinner ? .light : .medium))
                 Spacer()
-                Text(data.awayTeamScore, format: .number)
-                    .font(.title3.weight(data.isHomeTeamWinner ? .light : .medium))
+                Text(data.firstTeam.score, format: .number)
+                    .font(.title3.weight(data.secondTeam.isWinner ? .light : .medium))
 
             }
             
             HStack {
-                Text(data.homeTeamName)
-                    .font(.headline.weight(data.isHomeTeamWinner ? .medium : .light))
+                Text(data.secondTeam.teamName)
+                    .font(.headline.weight(data.secondTeam.isWinner ? .medium : .light))
 
                 Spacer()
-                Text(data.homeTeamScore, format: .number)
-                    .font(.title3.weight(data.isHomeTeamWinner ? .medium : .light))
+                Text(data.secondTeam.score, format: .number)
+                    .font(.title3.weight(data.secondTeam.isWinner ? .medium : .light))
 
             }
         }
@@ -34,7 +34,7 @@ struct LatestGameRow: View {
 }
 
 struct LatestGamesView: View {
-    var data: [NBAScoreUpperHeader]
+    var data: [ScoreModel]
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 0) {
@@ -44,7 +44,6 @@ struct LatestGamesView: View {
                         .padding(.horizontal, 32)
                         .background(Color.systemBackground)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
-//                        .frame(minWidth: 0, maxWidth: .infinity)
                         .padding(.leading, 20)
 
 
@@ -55,7 +54,7 @@ struct LatestGamesView: View {
 }
 
 #Preview {
-    LatestGamesView(data: NBAScoreUpperHeader.sample)
+    LatestGamesView(data: ScoreModel.sample)
         .background(Color.primary.quaternary.opacity(0.3))
         .frame(height: 400)
 }

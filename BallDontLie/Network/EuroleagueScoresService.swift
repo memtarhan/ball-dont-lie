@@ -8,16 +8,16 @@
 import Foundation
 
 protocol EuroleagueScoresService: APIService, EuroleagueEndpointsService {
-    func getScores() async throws -> ScoresResponse
+    func getScores() async throws -> EuroleagueScoresResponse
 }
 
 extension EuroleagueScoresService {
-    func getScores() async throws -> ScoresResponse {
+    func getScores() async throws -> EuroleagueScoresResponse {
         guard let endpoint = getScoresURL() else {
             throw APIError.badURL
         }
 
-        let response: ScoresResponse = try await handleDataTask(from: endpoint)
+        let response: EuroleagueScoresResponse = try await handleDataTask(from: endpoint)
         return response
     }
 }
