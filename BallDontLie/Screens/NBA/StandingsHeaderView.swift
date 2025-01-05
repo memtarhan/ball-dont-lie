@@ -11,7 +11,7 @@ struct TeamStatsModel: Identifiable {
     let name: String
     let value: String
 
-    var id: String { name }
+    var id: String { name + value }
 }
 
 struct TeamStandingModel: Identifiable {
@@ -22,7 +22,7 @@ struct TeamStandingModel: Identifiable {
 
     let stats: [TeamStatsModel]
 
-    var id: String { shortName }
+    var id: String { shortName + seat + name }
 
     static let sample = [
         TeamStandingModel(seat: "1",
@@ -61,10 +61,8 @@ struct TeamStandingModel: Identifiable {
     ]
 }
 
-struct StandingsHeaderModel: Identifiable {
+struct StandingsHeaderModel {
     let name: String
-
-    var id: String { name }
 
     static let sample = [StandingsHeaderModel(name: "W"),
                          StandingsHeaderModel(name: "L"),
@@ -111,16 +109,22 @@ struct StatsHeaderView: View {
     }
 }
 
+struct StatRowData: Identifiable {
+    let id = UUID()
+
+    let value: String
+}
+
 struct StatsRowView: View {
-    var data: [String]
+    var data: [StatRowData]
     var color: Color = .clear
     var itemWidth: CGFloat = 45
 
     // TODO: Some stats can have the same value and that affects list performance, have a key-value structure maybe?
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(data, id: \.self) { item in
-                Text(item)
+            ForEach(data) { item in
+                Text(item.value)
                     .font(.subheadline.weight(.medium))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.primary)
@@ -152,16 +156,12 @@ struct StandingsHeaderView: View {
                 Divider()
                 ScrollView(.horizontal, showsIndicators: false) {
                     VStack(spacing: 0) {
-                        StatsRowView(data: headerData.data.map { $0.name }, color: Color.gray.opacity(0.2))
+                        StatsRowView(data: headerData.data.map { StatRowData(value: $0.name) }, color: Color.gray.opacity(0.2))
                             .frame(height: 45)
 
                         ForEach(standings) { standing in
-                            NavigationLink {
-                                NBATeamDetails(shortName: standing.shortName, name: standing.name, logo: standing.logo)
-                            } label: {
-                                StatsRowView(data: standing.stats.map { $0.value })
-                                    .frame(height: 45)
-                            }
+                            StatsRowView(data: standing.stats.map { StatRowData(value: $0.value) })
+                                .frame(height: 45)
                         }
                     }
                 }

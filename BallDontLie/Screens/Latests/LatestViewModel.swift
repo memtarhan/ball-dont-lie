@@ -8,18 +8,17 @@
 import Foundation
 
 @MainActor
-class LatestViewModel: ObservableObject {
+class LatestViewModel: ObservableObject, LatestService {
     @Published var loading: Bool = true
     @Published var latestGames: [NBAScoreUpperHeader] = []
     @Published var topPerformers: [TopPerformerModel] = []
     @Published var statLeaders: [StatLeaderModel] = []
 
-    private let service = LatestService()
 
     func fetchLatest() async {
-        async let games = service.getLatestScores()
-        async let performers = service.getTopPerformers()
-        async let leaders = service.getStatLeaders()
+        async let games = getLatestScores()
+        async let performers = getTopPerformers()
+        async let leaders = getStatLeaders()
 
         let response = try! await [games, performers, leaders]
 

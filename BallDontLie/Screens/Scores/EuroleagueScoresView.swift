@@ -17,39 +17,36 @@ struct ScoreRow: View {
             Spacer()
             HStack {
                 Text("\(score.score)")
-                    .font(.subheadline)
-                Image(systemName: "basketball")
-                    .font(.footnote)
+                    .font(score.isWinner ? .body.bold() : .body)
             }
             .padding(.vertical, 6)
             .padding(.horizontal, 12)
-            .background(Color.blue.opacity(score.isWinner ? 0.3 : 0.1))
-            .clipShape(RoundedRectangle(cornerRadius: 12))
         }
     }
 }
 
-struct ScoresView: View {
-    @StateObject var model = ScoresModel()
+struct EuroleagueScoresView: View {
+    var data: [ScoreModel]
 
     var body: some View {
-        NavigationStack {
-            List {
-                ForEach(model.scores) { score in
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 20) {
+                ForEach(data) { score in
                     VStack(alignment: .leading) {
                         ScoreRow(score: score.firstTeam)
                         ScoreRow(score: score.secondTeam)
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(Color.systemBackground)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
-            .navigationTitle("Scores")
-        }
-        .task {
-            await model.handleScores()
         }
     }
 }
 
 #Preview {
-    ScoresView()
+    EuroleagueScoresView(data: ScoreModel.sample)
+        .background(Color.secondarySystemBackground)
 }

@@ -7,9 +7,15 @@
 
 import Foundation
 
-class LatestService: APIService {
+protocol LatestService: APIService, NBAEndpointsService {
+    func getLatestScores() async throws -> LatestScoresResponse
+    func getTopPerformers() async throws -> TopPerformersResponse
+    func getStatLeaders() async throws -> StatLeadersResponse
+}
+
+extension LatestService {
     func getLatestScores() async throws -> LatestScoresResponse {
-        guard let endpoint = Endpoints.NBA.getLatestScores() else {
+        guard let endpoint = getLatestScoresURL() else {
             throw APIError.badURL
         }
 
@@ -18,7 +24,7 @@ class LatestService: APIService {
     }
 
     func getTopPerformers() async throws -> TopPerformersResponse {
-        guard let endpoint = Endpoints.NBA.getLatestTopPerformers() else {
+        guard let endpoint = getLatestTopPerformersURL() else {
             throw APIError.badURL
         }
 
@@ -27,7 +33,7 @@ class LatestService: APIService {
     }
 
     func getStatLeaders() async throws -> StatLeadersResponse {
-        guard let endpoint = Endpoints.NBA.getStatLeaders() else {
+        guard let endpoint = getStatLeadersURL() else {
             throw APIError.badURL
         }
 

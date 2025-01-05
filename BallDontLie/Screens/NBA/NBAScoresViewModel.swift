@@ -8,14 +8,12 @@
 import Foundation
 
 @MainActor
-class NBAScoresViewModel: ObservableObject {
+class NBAScoresViewModel: ObservableObject, NBAScoresService {
     @Published var data: [NBAScoreDisplayModel] = []
     @Published var title: String = "..."
     @Published var description: String? = nil
 
     private var currentDisplayedDate: Date?
-
-    private let service = NBAService()
 
     func updateWithPreviousDate() {
         if let currentDisplayedDate {
@@ -28,7 +26,6 @@ class NBAScoresViewModel: ObservableObject {
         refresh()
     }
 
-    
     func updateWithNextDate() {
         if let currentDisplayedDate {
             self.currentDisplayedDate = currentDisplayedDate.addingTimeInterval(1 * 60 * 60 * 24)
@@ -39,7 +36,7 @@ class NBAScoresViewModel: ObservableObject {
 
         refresh()
     }
-    
+
     private func refresh() {
         data.removeAll()
         title = "..."
@@ -48,7 +45,7 @@ class NBAScoresViewModel: ObservableObject {
             await fetchScores()
         }
     }
-    
+
     func refreshToDate() {
         data.removeAll()
         title = "..."
@@ -60,9 +57,9 @@ class NBAScoresViewModel: ObservableObject {
     }
 
     func fetchScores() async {
-        let response = try! await service.getScores(date: currentDisplayedDate)
+        let response = try! await getScores(date: currentDisplayedDate)
         let date = response.date
-        currentDisplayedDate = date 
+        currentDisplayedDate = date
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM d, yyyy"
         title = formatter.string(from: date)
@@ -81,15 +78,18 @@ class NBAScoresViewModel: ObservableObject {
                             .teams[1].teamStatus == .winner
                     ),
                     periods: self.getPeriodStatsData(score.scores),
-                    color: score.color
+                    color: score.color,
+                    bottomFooter: score.stats.map { stat in
+                        NBAScoreBottomFooter(statType: stat[0], playerName: stat[1], statValue: stat[2])
+                    }
                 )
             }
-        
+
         if data.isEmpty {
             description = "No games played on this date.\nPull to get the latest scores"
-            
+
         } else {
-            description = nil 
+            description = nil
         }
     }
 

@@ -7,6 +7,19 @@
 
 import SwiftUI
 
+struct NBAScoreBottomFooter: Identifiable {
+    let statType: String
+    let playerName: String
+    let statValue: String
+
+    var id: String { statType + playerName + statValue }
+
+    static let sample = [
+        NBAScoreBottomFooter(statType: "PTS", playerName: "E. Mobley-CLE", statValue: "34"),
+        NBAScoreBottomFooter(statType: "TRB", playerName: "D. Lively-DAL", statValue: "11"),
+    ]
+}
+
 struct NBAScoreUpperHeader: Identifiable {
     let awayTeamName: String
     let awayTeamScore: Int
@@ -34,7 +47,7 @@ struct NBAScoreUpperHeader: Identifiable {
             awayTeamScore: 102,
             homeTeamName: "Los Angeles Lakers",
             homeTeamScore: 111,
-            isHomeTeamWinner: true)
+            isHomeTeamWinner: true),
     ]
 }
 
@@ -50,6 +63,7 @@ struct NBAScoreDisplayModel: Identifiable {
     let upperHeader: NBAScoreUpperHeader
     let periods: [NBAPeriodScore]
     let color: String
+    let bottomFooter: [NBAScoreBottomFooter]
 
     var id: String { color }
 
@@ -61,7 +75,8 @@ struct NBAScoreDisplayModel: Identifiable {
             NBAPeriodScore(period: "3rd", awayTeamScore: 22, homeTeamScore: 21),
             NBAPeriodScore(period: "4th", awayTeamScore: 20, homeTeamScore: 20),
         ],
-        color: "#1D428A"
+        color: "#1D428A",
+        bottomFooter: NBAScoreBottomFooter.sample
     )
 }
 
@@ -75,6 +90,8 @@ struct NBAScoreView: View {
             upperHeader
             Divider()
             scoresSection
+            Divider()
+            bottomFooter
         }
         .padding()
 //        .border(Color(hex: data.color), width: 1)
@@ -139,6 +156,26 @@ struct NBAScoreView: View {
                 }
             }
         }
+    }
+    
+    var bottomFooter: some View {
+        VStack {
+            ForEach(data.bottomFooter) { row in
+                HStack(alignment: .center) {
+                    HStack(spacing: 32) {
+                        Text(row.statType)
+                            .font(.headline.weight(.light))
+                        Text(row.playerName)
+                            .font(.headline.weight(.medium))
+                    }
+                    Spacer()
+                    Text(row.statValue)
+                        .font(.headline.weight(.bold))
+                }
+                .foregroundStyle(Color.white)
+            }
+        }
+        .padding(.horizontal, 20)
     }
 }
 

@@ -7,35 +7,10 @@
 
 import Foundation
 
-//private let baseURL = "https://ball-dont-lie-c3286c3bbfc2.herokuapp.com"
- private let baseURL = "http://127.0.0.1:8000"
+ private let baseURL = "https://ball-dont-lie-c3286c3bbfc2.herokuapp.com"
+//private let baseURL = "http://127.0.0.1:8000"
 
 struct Endpoints {
-    struct NBA {
-        static func getStandings() -> URL? {
-            URL(string: "\(baseURL)/nba/standings")
-        }
-
-        static func getScores(month: Int? = nil, day: Int? = nil, year: Int? = nil) -> URL? {
-            guard let month,
-                  let day,
-                  let year else { return URL(string: "\(baseURL)/nba/scores") }
-            return URL(string: "\(baseURL)/nba/scores?month=\(month)&day=\(day)&year=\(year)")
-        }
-
-        static func getLatestScores() -> URL? {
-            URL(string: "\(baseURL)/nba/latest-scores")
-        }
-
-        static func getLatestTopPerformers() -> URL? {
-            URL(string: "\(baseURL)/nba/latest-top-performers")
-        }
-
-        static func getStatLeaders() -> URL? {
-            URL(string: "\(baseURL)/nba/stat-leaders")
-        }
-    }
-
     struct Leagues {
         static func getStandings() -> URL? {
             URL(string: "\(baseURL)/leagues/standings")
@@ -52,5 +27,65 @@ struct Endpoints {
         static func get() -> URL? {
             URL(string: "\(baseURL)/euroleague/scores")
         }
+    }
+}
+
+protocol EndpointsService { }
+
+protocol NBAEndpointsService: EndpointsService {
+    func getScoresURL(date: Date?) -> URL?
+    func getStandingsURL() -> URL?
+    func getLatestScoresURL() -> URL?
+    func getLatestTopPerformersURL() -> URL?
+    func getStatLeadersURL() -> URL?
+}
+
+extension NBAEndpointsService {
+    func getScoresURL(date: Date?) -> URL? {
+        var url: URL?
+        if let date {
+            let calendar = Calendar.current
+            let month = calendar.component(.month, from: date)
+            let day = calendar.component(.day, from: date)
+            let year = calendar.component(.year, from: date)
+
+            url = URL(string: "\(baseURL)/nba/scores?month=\(month)&day=\(day)&year=\(year)")
+
+        } else {
+            url = URL(string: "\(baseURL)/nba/scores")
+        }
+
+        return url
+    }
+
+    func getStandingsURL() -> URL? {
+        URL(string: "\(baseURL)/nba/standings")
+    }
+
+    func getLatestScoresURL() -> URL? {
+        URL(string: "\(baseURL)/nba/latest-scores")
+    }
+
+    func getLatestTopPerformersURL() -> URL? {
+        URL(string: "\(baseURL)/nba/latest-top-performers")
+    }
+
+    func getStatLeadersURL() -> URL? {
+        URL(string: "\(baseURL)/nba/stat-leaders")
+    }
+}
+
+protocol EuroleagueEndpointsService: EndpointsService {
+    func getScoresURL() -> URL?
+    func getStandingsURL() -> URL?
+}
+
+extension EuroleagueEndpointsService {
+    func getScoresURL() -> URL? {
+        URL(string: "\(baseURL)/euroleague/scores")
+    }
+
+    func getStandingsURL() -> URL? {
+        URL(string: "\(baseURL)/euroleague/standings")
     }
 }

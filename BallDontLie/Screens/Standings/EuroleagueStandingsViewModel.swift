@@ -28,13 +28,12 @@ struct StandingModel: Identifiable {
 }
 
 @MainActor
-class StandingsModel: ObservableObject {
+class EuroleagueStandingsViewModel: ObservableObject, EuroleagueStandingsService {
     @Published var standings: [StandingModel] = []
 
-    private let service = StandingsService()
 
     func handleStandings() async {
-        let response = try! await service.get()
+        let response = try! await getStandings()
         let standingModels = response.standings.enumerated().map { index, standing in
             StandingModel(name: standing.teamName,
                           seat: "\(index + 1)",

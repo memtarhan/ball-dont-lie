@@ -47,26 +47,20 @@ struct StandingRow: View {
     }
 }
 
-struct StandingsView: View {
-    @StateObject private var model = StandingsModel()
+struct EuroleagueStandingsView: View {
+    var data: [StandingModel]
 
     var body: some View {
-        NavigationStack {
-            GeometryReader { geometry in
-                List {
-                    ForEach(model.standings) { standing in
-                        StandingRow(standing: standing, width: geometry.size.width / 2.5)
-                    }
+        GeometryReader { geometry in
+            List {
+                ForEach(data) { standing in
+                    StandingRow(standing: standing, width: geometry.size.width / 2.5)
                 }
-                .navigationTitle("Standings")
             }
-        }
-        .task {
-            await model.handleStandings()
         }
     }
 }
 
 #Preview {
-    StandingsView()
+    EuroleagueStandingsView(data: [])
 }

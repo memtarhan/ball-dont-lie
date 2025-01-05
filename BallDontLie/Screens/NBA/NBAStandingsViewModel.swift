@@ -8,13 +8,11 @@
 import Foundation
 
 @MainActor
-class NBAStandingsViewModel: ObservableObject {
+class NBAStandingsViewModel: ObservableObject, NNBAStandingsService {
     @Published var data: [(StandingsHeaderData, [TeamStandingModel])?] = []
 
-    private let service = NBAStandingsService()
-
     func fetchStandings() async {
-        let response = try! await service.get()
+        let response = try! await getStandings()
 
         let eastHeader = StandingsHeaderData(title: "EAST", data: StandingsHeaderModel.sample)
         let eastStandingstandings = response.standings.east.enumerated().map { index, standing in

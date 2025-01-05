@@ -28,11 +28,18 @@ struct ContentView: View {
                 }
                 .tag(2)
 
-            LeaguesView()
+            EuroleagueView()
                 .tabItem {
-                    Label("Standings", systemImage: "list.bullet.circle.fill")
+                    Label("Euroleague", systemImage: "globe.europe.africa.fill")
                 }
                 .tag(3)
+            
+            LeaguesView()
+                .tabItem {
+                    Label("Leagues", systemImage: "globe")
+                }
+                .tag(4)
+            
         }
     }
 }
